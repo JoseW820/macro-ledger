@@ -2,13 +2,14 @@
 
 1. 下载上月已经发布的官方文件，按月份整理到一个文件夹。
 2. 执行 `python -m macro_observer doctor`，确认配置和 Excel 依赖。
-3. 需要自动采集时运行 `python -m macro_observer run --period YYYY-MM`；手动文件工作流可跳过这一步。
-4. 网页执行 `python -m macro_observer web`，选择月份后点击“导入月度数据包”。
-5. 先点击“预览”，检查文件编号、统计期、数值和缺失项，再点击“确认导入”。
-6. 在“已上传文件”中核对记录；如同一指标重复上传，点击“一键移除重复项”，只保留最新版本。
-7. 点击“生成月报”或“导出 Agent 包”。
-8. 命令行等价操作：`python -m macro_observer report --period YYYY-MM`、`python -m macro_observer agent-context --period YYYY-MM`。
-9. 执行 `python -m macro_observer status --period YYYY-MM` 查看归档状态。
+3. 网页执行 `python -m macro_observer web`，选择月份后点击“导入月度数据包”。
+4. 先点击“预览”，检查文件编号、统计期、数值和缺失项，再点击“确认导入”。
+5. 在“已上传文件”中核对记录；如同一指标重复上传，点击“一键移除重复项”，只保留最新版本。
+6. 点击“生成月报”或“导出 Agent 包”。
+7. 命令行等价操作：`python -m macro_observer report --period YYYY-MM`、`python -m macro_observer agent-context --period YYYY-MM`。
+8. 执行 `python -m macro_observer status --period YYYY-MM` 查看归档状态。
+
+项目默认采用手动下载、手动上传模式。自动 Provider 和官网连通性检查属于可选扩展，不是月度运行的必要步骤。
 
 ## 本地网页工作台
 

@@ -39,14 +39,14 @@ python -m pip install -e ".[dev]"
 python -m macro_observer --help
 python -m macro_observer list-indicators
 python -m macro_observer validate-config
-python -m macro_observer run --period 2026-08 --dry-run
-python -m macro_observer check-official-sources
 python -m macro_observer report --period 2026-08
 python -m macro_observer status --period 2026-08
 python -m macro_observer doctor
 python -m macro_observer web
 python -m macro_observer agent-context --period 2026-08
 ```
+
+`run`、`check-official-sources` 和各类 Provider 是保留的可选 CLI/适配器能力，不是网页默认工作流，也不要求用户配置 MCP、FRED 或其他 API。
 
 网页和命令行导出的 Agent 分析包默认保存到项目自己的 `data/agent_context`。如需更换目录，可设置环境变量 `MACRO_AGENT_EXPORT_DIR`，或在命令行使用 `--output-dir`。
 
@@ -56,9 +56,20 @@ python -m macro_observer agent-context --period 2026-08
 
 Agent 分析结果支持按主题展开的推理结构。六个主题均可输出 `data_facts`、`what_data_indicates`、`cross_theme_links`、`logic_chain`、`future_implications`、`supporting_evidence`、`counter_evidence`、`unknowns`、`watchlist` 和 `data_refs`。其中跨主题关联只能引用 Agent 包内指标，逻辑链应区分数据事实、传导机制和条件式影响；旧版只含 `summary` 与证据字段的 JSON 仍可导入，但缺少的扩展段落会显示为“未提供”。
 
-### 国家统计局官方文件导入
+## 实际使用流程：手动下载、网页导入
 
-当国家统计局 QueryData 接口被网络策略拦截时，先从国家统计局页面下载官方 CSV/JSON，再导入项目。文件导入会校验统计期、全国口径和数值，并同时保存原始文件快照与标准化记录：
+项目当前最稳定、最适合普通用户的方式是：用户从国家统计局、人民银行、外汇局、财政部、海关或其他官方页面下载当月 Excel/CSV 文件，再在网页中导入。项目不假设这些官网提供稳定 API，也不会自动替用户寻找或下载全部数据。
+
+1. 在官方网页下载上月已经发布的数据文件；
+2. 按项目提供的月度数据清单整理文件名；
+3. 启动网页并点击“导入月度数据包”；
+4. 选择月份文件夹，先预览，再确认导入；
+5. 在“已上传文件”中检查重复项和缺失项；
+6. 导出 Agent 包交给外部 AI 分析；
+7. 将 `analysis-result.json` 导回网页并确认；
+8. 生成月报和数据矩阵。
+
+也可以通过命令行导入单个国家统计局文件：
 
 ```bash
 python -m macro_observer import-nbs-file \
@@ -67,39 +78,23 @@ python -m macro_observer import-nbs-file \
   --file data/incoming/nbs/industrial_value_added_yoy.csv
 ```
 
-`cnbs` 用于指标搜索、代码确认和最新值验证；官方文件用于历史序列。`NBSProvider` 的 HTTP QueryData 路径仍保留为可选路径，接口恢复后可继续使用。`data/incoming/` 已加入 `.gitignore`，不会把个人下载文件提交到 GitHub。
+`data/incoming/`、`data/raw/`、`data/normalized/` 和 `reports/` 都是本机数据目录，已加入 `.gitignore`，不会提交到 GitHub。
 
-官方来源采用动态发现思路：人民银行按统计栏目和表名定位 Excel，外汇局按文章标题发现月度数据，海关和财政部保留官方栏目/附件入口。项目不会把官网入口可访问误认为数据已成功采集。
+## 可选适配器说明
 
-人民银行动态附件解析已加入 `app/providers/pboc_workbook.py`，安装 `.[spreadsheets]` 后可解析官方 `.xlsx` 文件：只读取目标“单位”区段和月度行，忽略说明、合计及其他单位区段。
+代码中保留了国家统计局 HTTP、人民银行、外汇局、财政部、海关、中国货币网、FRED 和 cnbs 等 Provider，主要用于后续扩展、测试和有明确接口条件的用户。它们不是网页上传流程的前置条件，不能替代用户对官方文件的下载、口径确认和导入预览。
 
-官方来源连通性检查：
-
-```bash
-python -m macro_observer check-official-sources
-```
-
-该命令只报告官网入口的 HTTP 状态，不把入口可访问误认为数据已经采集。外汇局文章解析器已能从月度正文提取银行结售汇差额和银行代客涉外收付款差额，并保留流入、流出组成项。海关当前环境存在 TLS 证书链问题，程序会明确报告错误，不绕过证书校验。
-
-财政部已确认使用国库司统计数据入口 `https://gks.mof.gov.cn/tongjishuju/`，该栏目列出财政收支文章及政府收支/融资 PDF 附件；项目会按标题动态发现，不写死文章编号。海关仍保留官网栏目发现器，当前连通性受本机 TLS/站点策略影响。
-
-海关相关宏观总量已调整为国家统计局主来源：出口、进口和贸易差额指标的 `primary_source` 为 `nbs`，`cnbs` 作为候选搜索和最新值核验来源。项目明确标注这是国家统计局口径，不伪装成海关官网原始数据；海关 Provider 仅保留为未来官方入口恢复后的可选适配器。
-
-利率和国际数据沿用同一来源原则：官方动态页面/附件优先，HTTP/API 作为可选路径，cnbs 只做搜索、口径确认和最新值核验。利率代理序列必须显式标记 `is_proxy=true`，不会把 SHIBOR 或 R007 静默当成 DR007。
-
-阶段四真实接口约定：FRED 使用 `fred_fetcher` 调用 `/fred/series/observations`，API Key 只从 `FRED_API_KEY` 读取；中国货币网可使用官方 `fdr-chrt.csv` 作为 FDR007 定盘数据入口。FDR007 与 DR007 不同，项目不会自动改名。
-
-FRED 序列映射包括 `FEDFUNDS`、`DGS10`、`DTWEXBGS`；中国货币网 CSV 支持按月份计算 FDR007 定盘月均，并记录观测数量和代理标识。FRED 真实取数需要用户配置有效 `FRED_API_KEY`。
+FRED API Key 只对选择使用 FRED CLI 适配器的用户有意义；当前网页不直接调用 FRED，也不会因为没有 API Key 而把数据填成 0。
 
 项目提供非阻断质量检查、可追溯派生计算和主题状态模块。质量问题不会把缺失值填成 0，也不会把不同来源或代理口径混在一起。
 
-国家统计局指标代码必须先经过目录核对，再通过命令行显式传入，例如：
+如果选择使用可选的自动 Provider，国家统计局指标代码必须先经过目录核对，再通过命令行显式传入，例如：
 
 ```bash
 python -m macro_observer run --period 2025-08 --only cpi_yoy --nbs-code cpi_yoy=已确认代码
 ```
 
-采集结果写入 `data/raw/` 和 `data/normalized/`；落库使用 `data/macro_observer.sqlite`。未配置确认代码、接口失败、无数据和口径不匹配都会保留为明确状态，不会用相近指标替代。FRED 的 `FRED_API_KEY` 只从环境变量读取，不写入日志、原始响应或数据库。
+自动 Provider 的结果写入 `data/raw/` 和 `data/normalized/`；网页上传同样会生成标准化记录并落库到 `data/macro_observer.sqlite`。接口失败、无数据和口径不匹配都会保留为明确状态，不会用相近指标替代。
 
 ## 项目边界
 
