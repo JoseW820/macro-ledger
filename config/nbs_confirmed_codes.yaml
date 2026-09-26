@@ -1,0 +1,42 @@
+version: 1
+confirmed_at: "2026-09-24"
+source: cnbs_search_and_fetch_data_from_source
+notes: >-
+  这些是 cnbs 返回的月度数据集/指标候选代码。代码本身不代表当前项目已经接通
+  独立统计局 HTTP 接口；cnbs 适配器使用数据集返回的 dt、da_name 和 value 字段。
+confirmed_series:
+  industrial_value_added_yoy:
+    dataset_id: "2518cdacedbd41e790b455113dff9b27"
+    metric_id: "ef1b1765960d45a29b4d7c4ca91be916"
+    name: 规上工业增加值同比增长
+    frequency: monthly
+    unit: "%"
+    geography: 全国
+  pmi_manufacturing:
+    dataset_id: "793a9f10f0494c20acf046aaecf76d2b"
+    metric_id: "a09aa989bdcf4cffa2021795722eb916"
+    name: 制造业采购经理指数
+    frequency: monthly
+    unit: "%"
+    geography: 全国
+  pmi_manufacturing_production:
+    dataset_id: "793a9f10f0494c20acf046aaecf76d2b"
+    metric_id: "6729aa00f9ed46d8b30c5d2312214b89"
+    name: 制造业采购经理指数_生产
+    frequency: monthly
+    unit: "%"
+    geography: 全国
+  cpi_monthly_mom:
+    dataset_id: "b50457fdeade41b0ac011456f7ab5e44"
+    metric_id: "f3904a1f5a384d54a3944ec6e2df3d1c"
+    name: 居民消费价格指数上月=100
+    frequency: monthly
+    unit: index
+    geography: 全国
+  ppi_monthly_mom:
+    dataset_id: "ab3a1ae25fdf45c1a15a30351a869800"
+    metric_id: "1e5ace697e6a44d4ba5e8a77704858de"
+    name: 工业生产者出厂价格指数上月=100
+    frequency: monthly
+    unit: index
+    geography: 全国

@@ -1,0 +1,57 @@
+version: 1
+sources:
+  nbs:
+    name: 国家统计局国家数据
+    kind: official_api
+    base_url: https://data.stats.gov.cn/easyquery.htm
+    database: hgyd
+    series_codes: {}
+    enabled: true
+  cnbs:
+    name: cnbs统计数据搜索
+    kind: mcp_optional
+    enabled: true
+  pboc:
+    name: 中国人民银行
+    kind: official_api_or_file
+    base_url: http://www.pbc.gov.cn/
+    endpoint_env: PBOC_OFFICIAL_ENDPOINT
+    enabled: true
+  customs:
+    name: 海关总署
+    kind: official_api_or_file
+    base_url: http://www.customs.gov.cn/
+    endpoint_env: CUSTOMS_OFFICIAL_ENDPOINT
+    enabled: true
+  safe:
+    name: 国家外汇管理局
+    kind: official_api_or_file
+    base_url: https://www.safe.gov.cn/
+    endpoint_env: SAFE_OFFICIAL_ENDPOINT
+    enabled: true
+  mof:
+    name: 财政部
+    kind: official_api_or_file
+    base_url: https://gks.mof.gov.cn/tongjishuju/
+    endpoint_env: MOF_OFFICIAL_ENDPOINT
+    enabled: true
+  chinamoney:
+    name: 中国货币网
+    kind: official_web_or_file
+    base_url: http://www.chinamoney.com.cn/
+    enabled: true
+  chinabond:
+    name: 中国债券信息网
+    kind: official_web_or_file
+    base_url: https://www.chinabond.com.cn/
+    enabled: true
+  fred:
+    name: Federal Reserve Economic Data
+    kind: api_key_optional
+    base_url: https://api.stlouisfed.org/
+    enabled: false
+  rates:
+    name: 中国货币网与中国债券信息网
+    kind: official_web_or_file
+    base_url: https://www.chinamoney.com.cn/
+    enabled: true

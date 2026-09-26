@@ -1,0 +1,17 @@
+version: 1
+rules:
+  - source: nbs
+    expected_frequency: monthly
+    release_note: 国家统计局月度指标按官方发布节奏更新，1-2月部分指标可能合并发布
+  - source: pboc
+    expected_frequency: monthly
+    release_note: 货币和金融统计按人民银行实际发布日更新
+  - source: nbs
+    expected_frequency: monthly
+    release_note: 海关月度进出口按官方发布日更新
+  - source: safe
+    expected_frequency: monthly_or_quarterly
+    release_note: 银行涉外数据和国际收支的频率不同，不能强行月度化
+  - source: mof
+    expected_frequency: monthly
+    release_note: 财政数据需区分当期和累计口径

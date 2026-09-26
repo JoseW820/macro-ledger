@@ -1,0 +1,589 @@
+version: 1
+indicators:
+  - indicator_id: industrial_value_added_yoy
+    name: 规上工业增加值同比
+    theme: production
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月中旬发布上月数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 规模以上工业增加值相对于上年同月的增长速度
+
+  - indicator_id: retail_sales_yoy
+    name: 社会消费品零售总额同比
+    theme: demand
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月中旬发布上月数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 社会消费品零售总额相对于上年同月的增长速度
+
+  - indicator_id: fixed_asset_investment_ytd_yoy
+    name: 固定资产投资累计同比
+    theme: demand
+    frequency: monthly
+    unit: "%"
+    value_type: ytd_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: true
+    release_description: 国家统计局通常于次月中旬发布上月累计数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 固定资产投资年初至当月累计值相对于上年同期的增长速度
+
+  - indicator_id: cpi_yoy
+    name: 居民消费价格指数同比
+    theme: prices
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月上旬发布上月数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 全国居民消费价格相对于上年同月的变化
+
+  - indicator_id: cpi_core_yoy
+    name: 核心居民消费价格指数同比
+    theme: prices
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月上旬发布上月数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 扣除食品和能源后的核心居民消费价格变化
+
+  - indicator_id: ppi_yoy
+    name: 工业生产者出厂价格指数同比
+    theme: prices
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月上旬发布上月数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 工业生产者出厂价格相对于上年同月的变化
+
+  - indicator_id: pmi_manufacturing
+    name: 制造业采购经理指数
+    theme: production
+    frequency: monthly
+    unit: index
+    value_type: index_level
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于当月末发布当月调查数据
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 制造业采购经理调查扩散指数
+
+  - indicator_id: m1_yoy
+    name: M1货币供应量同比
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月末余额同比
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 狭义货币供应量期末余额同比增速
+
+  - indicator_id: m0_yoy
+    name: M0货币供应量同比
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月末余额同比
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 流通中货币期末余额同比增速
+
+  - indicator_id: m2_yoy
+    name: M2货币供应量同比
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月末余额同比
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 广义货币供应量期末余额同比增速
+
+  - indicator_id: social_financing_stock_yoy
+    name: 社会融资规模存量同比
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月末存量同比
+    source_url_field: official_release_url
+    homepage_core: true
+    definition: 实体经济从金融体系获得资金形成的存量同比增速
+
+  - indicator_id: social_financing_increment_monthly
+    name: 社会融资规模增量当月值
+    theme: credit
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: monthly_absolute
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月社会融资规模增量
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 实体经济从金融体系获得的社会融资规模增量当月值
+
+  - indicator_id: rmb_loans_stock_yoy
+    name: 人民币贷款余额同比
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月末人民币贷款余额同比
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 金融机构人民币贷款期末余额同比增速
+
+  - indicator_id: rmb_loans_increment_monthly
+    name: 人民币贷款增量当月值
+    theme: credit
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: monthly_absolute
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月人民币贷款增量
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 金融机构人民币贷款增量当月值
+
+  - indicator_id: rmb_deposits_stock_yoy
+    name: 人民币存款余额同比
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: pboc
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 中国人民银行通常于次月中旬发布上月末人民币存款余额同比
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 金融机构人民币存款期末余额同比增速
+
+  - indicator_id: loan_prime_rate_1y
+    name: 1年期贷款市场报价利率
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_absolute
+    primary_source: pboc
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国人民银行按月公布贷款市场报价利率
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 全国银行间同业拆借中心公布的1年期贷款市场报价利率
+
+  - indicator_id: industrial_profit_yoy
+    name: 规模以上工业企业利润同比
+    theme: profits
+    frequency: monthly
+    unit: "%"
+    value_type: ytd_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: true
+    release_description: 国家统计局通常于次月下旬发布上月累计数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 规模以上工业企业利润年初至当月累计同比变化
+
+  - indicator_id: electricity_generation_yoy
+    name: 规模以上工业发电量同比
+    theme: production
+    frequency: monthly
+    unit: "%"
+    value_type: monthly_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月中旬发布上月发电量数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 全国规模以上工业企业发电量相对于上年同月的增长速度
+
+  - indicator_id: finished_goods_inventory_yoy
+    name: 规模以上工业企业产成品存货同比
+    theme: production
+    frequency: monthly
+    unit: "%"
+    value_type: stock_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局通常于次月下旬发布上月末产成品存货数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 规模以上工业企业产成品存货期末余额相对于上年同期的增长速度
+
+  - indicator_id: capacity_utilization_rate
+    name: 工业产能利用率当季值
+    theme: production
+    frequency: quarterly
+    unit: "%"
+    value_type: quarterly_absolute
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 国家统计局按季度发布工业产能利用率数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 全国工业产能利用率当季值，不将季度值拆分为月度值
+
+  - indicator_id: real_estate_sales_area_ytd_yoy
+    name: 商品房销售面积累计同比
+    theme: housing
+    frequency: monthly
+    unit: "%"
+    value_type: ytd_yoy
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: true
+    release_description: 国家统计局通常于次月中旬发布上月累计数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 商品房销售面积年初至当月累计同比变化
+
+  - indicator_id: exports_rmb_monthly
+    name: 出口额当月值
+    theme: external
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: monthly_absolute
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 海关总署通常于次月上旬发布上月进出口数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 国家统计局公布的全国货物出口额人民币当月值；不等同于海关原始附件
+
+  - indicator_id: imports_rmb_monthly
+    name: 进口额当月值
+    theme: external
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: monthly_absolute
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 海关总署通常于次月上旬发布上月进出口数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 国家统计局公布的全国货物进口额人民币当月值；不等同于海关原始附件
+
+  - indicator_id: trade_balance_rmb_monthly
+    name: 贸易差额当月值
+    theme: external
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: monthly_absolute
+    primary_source: nbs
+    fallback_sources: [cnbs]
+    allow_cumulative: false
+    release_description: 根据当月出口额和进口额计算，随海关数据发布
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 国家统计局口径下全国出口额减进口额的当月差额
+
+  - indicator_id: bank_cross_border_receipts_payments_balance_usd
+    name: 银行代客涉外收付款差额
+    theme: external
+    frequency: monthly
+    unit: 亿美元
+    value_type: monthly_absolute
+    primary_source: safe
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 国家外汇管理局通常于次月下旬发布上月银行代客涉外收付款数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 银行代客涉外收入减支出的当月差额，不等同于银行结售汇
+
+  - indicator_id: foreign_exchange_reserves_usd
+    name: 外汇储备期末余额
+    theme: external
+    frequency: monthly
+    unit: 亿美元
+    value_type: month_end
+    primary_source: safe
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 国家外汇管理局通常于次月上旬发布上月末外汇储备数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 国家外汇储备期末余额
+
+  - indicator_id: cny_usd_month_end
+    name: 人民币兑美元月末中间价
+    theme: external
+    frequency: monthly
+    unit: 人民币/美元
+    value_type: month_end
+    primary_source: chinamoney
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国人民银行按交易日发布中间价，月末取最后交易日
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 当月最后交易日人民币兑美元中间价
+
+  - indicator_id: bank_settlement_balance_usd
+    name: 银行结售汇差额
+    theme: external
+    frequency: monthly
+    unit: 亿美元
+    value_type: monthly_absolute
+    primary_source: safe
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 国家外汇管理局通常于次月下旬发布上月银行结售汇数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 银行结汇减售汇，不含银行间外汇市场交易
+
+  - indicator_id: international_balance_current_account
+    name: 国际收支经常账户差额
+    theme: external
+    frequency: quarterly
+    unit: 亿美元
+    value_type: quarterly_absolute
+    primary_source: safe
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 国家外汇管理局按季度发布国际收支数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 国际收支平衡表中的经常账户差额
+
+  - indicator_id: china_10y_gov_yield
+    name: 中国10年期国债收益率
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: month_average
+    primary_source: chinabond
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国债券信息网按交易日发布收益率，月度取月平均
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 中国10年期国债收益率月度口径
+
+  - indicator_id: cny_usd_month_average
+    name: 人民币兑美元中间价月均
+    theme: external
+    frequency: monthly
+    unit: 人民币/美元
+    value_type: month_average
+    primary_source: rates
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国人民银行按交易日发布中间价，按交易日计算月均
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 人民币兑美元中间价月度平均值
+
+  - indicator_id: china_10y_gov_yield_month_end
+    name: 中国10年期国债收益率月末
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: month_end
+    primary_source: rates
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国债券信息网按交易日发布收益率，月末取最后交易日
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 中国10年期国债收益率月末值
+
+  - indicator_id: dr007_month_average
+    name: DR007月均
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: month_average
+    primary_source: rates
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国货币网按交易日发布DR007，按交易日计算月均
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 银行间存款类金融机构7天质押式回购利率月度平均值
+
+  - indicator_id: repo_7d_month_average
+    name: 银行间7天回购利率月均
+    theme: credit
+    frequency: monthly
+    unit: "%"
+    value_type: month_average
+    primary_source: rates
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 中国货币网按交易日发布银行间回购利率，按交易日计算月均
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 银行间7天回购利率月度平均值
+
+  - indicator_id: us_fed_funds_rate
+    name: 美国联邦基金利率
+    theme: international
+    frequency: monthly
+    unit: "%"
+    value_type: month_average
+    primary_source: fred
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: FRED按日或月度序列发布，项目按配置频率读取
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 美国联邦基金利率月度平均值
+
+  - indicator_id: us_10y_treasury_yield
+    name: 美国10年期国债收益率
+    theme: international
+    frequency: monthly
+    unit: "%"
+    value_type: month_average
+    primary_source: fred
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: FRED按交易日发布美国10年期国债收益率
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 美国10年期国债收益率月度平均值
+
+  - indicator_id: dollar_index
+    name: 美元指数
+    theme: international
+    frequency: monthly
+    unit: index
+    value_type: month_average
+    primary_source: fred
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: FRED发布美元指数序列
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 美元指数月度平均值
+
+  - indicator_id: general_public_budget_revenue_ytd_yoy
+    name: 全国一般公共预算收入累计
+    theme: fiscal
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: ytd_absolute
+    primary_source: mof
+    fallback_sources: []
+    allow_cumulative: true
+    release_description: 财政部通常于次月发布上月全国一般公共预算收支数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 全国一般公共预算收入年初至当月累计金额；原指标 ID 保留以兼容历史数据
+
+  - indicator_id: general_public_budget_expenditure_ytd_yoy
+    name: 全国一般公共预算支出累计
+    theme: fiscal
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: ytd_absolute
+    primary_source: mof
+    fallback_sources: []
+    allow_cumulative: true
+    release_description: 财政部通常于次月发布上月全国一般公共预算收支数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 全国一般公共预算支出年初至当月累计金额；原指标 ID 保留以兼容历史数据
+
+  - indicator_id: central_general_budget_revenue_ytd_yoy
+    name: 中央一般公共预算收入累计
+    theme: fiscal
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: ytd_absolute
+    primary_source: mof
+    fallback_sources: []
+    allow_cumulative: true
+    release_description: 财政部通常于次月发布上月中央一般公共预算收入数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 中央一般公共预算收入年初至当月累计金额；原指标 ID 保留以兼容历史数据
+
+  - indicator_id: local_general_budget_revenue_ytd_yoy
+    name: 地方一般公共预算收入累计
+    theme: fiscal
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: ytd_absolute
+    primary_source: mof
+    fallback_sources: []
+    allow_cumulative: true
+    release_description: 财政部通常于次月发布上月地方一般公共预算收入数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 地方一般公共预算收入年初至当月累计金额；原指标 ID 保留以兼容历史数据
+
+  - indicator_id: government_bond_net_financing_monthly
+    name: 政府债净融资当月值
+    theme: fiscal
+    frequency: monthly
+    unit: 亿元人民币
+    value_type: monthly_absolute
+    primary_source: mof
+    fallback_sources: []
+    allow_cumulative: false
+    release_description: 财政部按月发布政府债发行及相关财政数据
+    source_url_field: official_release_url
+    homepage_core: false
+    definition: 政府债发行额减到期偿还额的当月净融资，不等同于财政支出

@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>宏观观察台 · 2026年8月月报</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #667380;
+      --line: #dfe5e8;
+      --canvas: #f3f6f5;
+      --paper: #ffffff;
+      --navy: #123247;
+      --teal: #147d79;
+      --teal-soft: #e6f3f1;
+      --orange: #c56e35;
+      --orange-soft: #fff0e6;
+      --red: #bd4f4b;
+      --red-soft: #fbeceb;
+      --blue-soft: #eaf1f7;
+      --shadow: 0 12px 28px rgba(23, 33, 43, .07);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--canvas); font: 14px/1.55 "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+    button { font: inherit; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 232px 1fr; }
+    aside { background: var(--navy); color: #dbe8ed; padding: 26px 16px 20px; display: flex; flex-direction: column; }
+    .brand { padding: 0 12px 27px; border-bottom: 1px solid rgba(255,255,255,.13); }
+    .brand-kicker { color: #8db7bf; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+    .brand h1 { margin: 6px 0 0; color: #fff; font-size: 21px; font-weight: 650; letter-spacing: .03em; }
+    nav { padding-top: 22px; }
+    .nav-section { color: #7895a0; font-size: 11px; margin: 0 12px 9px; letter-spacing: .12em; }
+    .nav-item { display: flex; align-items: center; gap: 11px; width: 100%; border: 0; background: transparent; color: #c6d8de; padding: 11px 12px; border-radius: 6px; text-align: left; text-decoration: none; cursor: pointer; }
+    .nav-item.active { background: rgba(255,255,255,.1); color: #fff; }
+    .nav-icon { width: 20px; height: 20px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 4px; font-size: 11px; opacity: .9; }
+    .aside-bottom { margin-top: auto; padding: 15px 12px 0; border-top: 1px solid rgba(255,255,255,.13); color: #9db4bc; font-size: 12px; }
+    .aside-bottom strong { color: #e6f1f2; font-weight: 500; display: block; margin-bottom: 3px; }
+    main { min-width: 0; }
+    .topbar { height: 70px; background: var(--paper); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 34px; }
+    .crumb { color: var(--muted); font-size: 13px; }
+    .crumb strong { color: var(--ink); font-weight: 650; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .period { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 8px 12px; border-radius: 5px; }
+    .action { border: 1px solid var(--navy); background: var(--navy); color: #fff; padding: 8px 14px; border-radius: 5px; cursor: pointer; }
+    .action:hover { background: #0b2738; }
+    .content { padding: 30px 34px 42px; max-width: 1640px; }
+    .headline { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-bottom: 25px; }
+    .headline h2 { margin: 0; font-size: 26px; letter-spacing: -.02em; }
+    .headline p { margin: 7px 0 0; color: var(--muted); }
+    .report-meta { text-align: right; color: var(--muted); font-size: 12px; }
+    .report-meta b { color: var(--teal); font-weight: 650; }
+    .section-title { display: flex; align-items: center; justify-content: space-between; margin: 27px 0 11px; }
+    .section-title h3 { margin: 0; font-size: 15px; font-weight: 700; }
+    .section-title span { color: var(--muted); font-size: 12px; }
+    .status-grid { display: grid; grid-template-columns: repeat(6, minmax(130px, 1fr)); gap: 12px; }
+    .status { background: var(--paper); border: 1px solid var(--line); padding: 16px; border-radius: 6px; box-shadow: 0 3px 9px rgba(23,33,43,.025); min-height: 122px; }
+    .status-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+    .dot.orange { background: var(--orange); }
+    .dot.red { background: var(--red); }
+    .status strong { display: block; margin-top: 15px; font-size: 21px; font-weight: 650; }
+    .status small { color: var(--muted); }
+    .up { color: var(--teal); } .down { color: var(--red); } .flat { color: var(--orange); }
+    .grid-main { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, .9fr); gap: 16px; align-items: start; }
+    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; padding: 17px 19px 13px; border-bottom: 1px solid var(--line); }
+    .panel-head h4 { margin: 0; font-size: 14px; }
+    .panel-head span { color: var(--muted); font-size: 12px; }
+    .chart-wrap { padding: 13px 17px 10px; }
+    .chart-labels { display: flex; justify-content: space-between; color: #84909a; font-size: 11px; padding: 0 7px 4px; }
+    svg.chart { width: 100%; height: 190px; display: block; }
+    .legend { display: flex; gap: 18px; color: var(--muted); font-size: 12px; padding: 8px 6px 0; }
+    .legend i { display: inline-block; width: 16px; height: 3px; margin: 0 5px 3px 0; border-radius: 3px; background: var(--teal); }
+    .legend i.orange { background: var(--orange); }
+    .narrative { padding: 17px 20px 20px; }
+    .narrative-lead { background: var(--blue-soft); border-left: 3px solid var(--navy); padding: 13px 14px; color: #294353; margin-bottom: 15px; }
+    .narrative h5 { margin: 16px 0 6px; font-size: 13px; }
+    .narrative p { margin: 0; color: #4e5d68; }
+    .evidence { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .tag { border-radius: 3px; padding: 4px 7px; font-size: 11px; background: var(--teal-soft); color: #14645f; }
+    .tag.warn { background: var(--orange-soft); color: #955024; }
+    .matrix { overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+    th { color: var(--muted); font-size: 12px; font-weight: 500; background: #fafbfb; }
+    td { font-size: 13px; }
+    tr:last-child td { border-bottom: 0; }
+    .metric-name { font-weight: 650; color: #263842; }
+    .sub { color: var(--muted); font-size: 11px; margin-left: 5px; }
+    .badge { display: inline-block; padding: 3px 7px; border-radius: 3px; font-size: 11px; }
+    .badge.up { background: var(--teal-soft); } .badge.down { background: var(--red-soft); } .badge.flat { background: var(--orange-soft); }
+    .source-list { padding: 4px 19px 10px; }
+    .source-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .source-row:last-child { border-bottom: 0; }
+    .source-name { display: flex; align-items: center; gap: 9px; }
+    .source-name b { font-weight: 600; }
+    .source-name small { display: block; color: var(--muted); font-size: 11px; }
+    .source-release-time { color: var(--teal); font-size: 12px; text-align: right; }
+    @media (max-width: 1100px) { .status-grid { grid-template-columns: repeat(3, 1fr); } .grid-main { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) { .app { display: block; } aside { display: none; } .topbar { padding: 0 17px; } .content { padding: 22px 17px 35px; } .headline { display: block; } .report-meta { text-align: left; margin-top: 13px; } .status-grid { grid-template-columns: repeat(2, 1fr); } .panel { overflow-x: auto; } .panel-head, .narrative, .chart-wrap, .source-list { min-width: 620px; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand"><div class="brand-kicker">Macro Desk</div><h1>宏观观察台</h1></div>
+      <nav>
+        <div class="nav-section">工作台</div>
+        <button class="nav-item active"><span class="nav-icon">月</span>月度报告</button>
+        <a class="nav-item" href="/workbench?view=matrix"><span class="nav-icon">矩</span>数据矩阵</a>
+        <a class="nav-item" href="/workbench?view=history"><span class="nav-icon">线</span>核心指标走势</a>
+        <div class="nav-section" style="margin-top:24px">资料库</div>
+        <a class="nav-item" href="/workbench?view=definitions"><span class="nav-icon">指</span>指标与口径</a>
+        <a class="nav-item" href="/workbench?view=sources"><span class="nav-icon">源</span>官方数据公布</a>
+        <a class="nav-item" href="/workbench?view=archive"><span class="nav-icon">档</span>月份归档</a>
+      </nav>
+      <div class="aside-bottom"><strong>上次整理</strong>2026-09-23  ·  8月数据<br><span style="color:#79b7ae">● 24项指标已更新</span></div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div class="crumb">月度报告 <span style="margin:0 7px;color:#aab5ba">/</span> <strong>2026年8月</strong></div>
+        <div class="top-actions"><select class="period" aria-label="选择报告期"><option value="2026-08">2026年8月</option><option value="2026-07">2026年7月</option><option value="2026-06">2026年6月</option></select><button class="action" id="refreshBtn">刷新当前月份</button><button class="action" id="batchBtn" style="background:#fff;color:var(--navy)">导入月度数据包</button><button class="action" id="uploadBtn" style="background:#fff;color:var(--navy)">导入文件</button><button class="action" id="uploadsBtn" style="background:#fff;color:var(--navy)">已上传文件</button><button class="action" id="reportBtn">生成月报</button><button class="action" id="agentBtn" style="background:#fff;color:var(--navy)">导出 Agent 包</button><button class="action" id="analysisBtn" style="background:#fff;color:var(--navy)">导入 AI 分析</button></div>
+      </header>
+      <section class="content">
+        <div class="headline"><div><h2>2026年8月宏观观察</h2><p>基于最新官方月度数据的运行状态与传导关系</p></div><div class="report-meta"><b>数据齐全度 92%</b><br>最后更新：2026-09-23 · 24项指标<br><span id="analysisState">AI 分析：未导入</span></div></div>
+        <div class="section-title"><h3>宏观状态</h3><span>相对上月的方向判断</span></div>
+        <div class="regime-summary" id="regimeSummary"><strong id="regimeLabel">尚未确认宏观状态</strong><span id="regimeConfidence">等待 AI 分析结果</span></div>
+        <div class="status-grid">
+          <div class="status"><div class="status-top">生产与供给 <span class="dot orange"></span></div><strong id="statusGrowth" class="flat">分化</strong><small id="statusGrowthNote">尚未确认 AI 分析</small><button type="button" class="theme-toggle" data-theme="生产与供给">查看分析</button></div>
+          <div class="status"><div class="status-top">需求与收入 <span class="dot orange"></span></div><strong id="statusStructure" class="flat">分化</strong><small id="statusStructureNote">尚未确认 AI 分析</small><button type="button" class="theme-toggle" data-theme="需求与收入">查看分析</button></div>
+          <div class="status"><div class="status-top">价格与利润 <span class="dot orange"></span></div><strong id="statusPrice" class="flat">成本上行</strong><small id="statusPriceNote">尚未确认 AI 分析</small><button type="button" class="theme-toggle" data-theme="价格与利润">查看分析</button></div>
+          <div class="status"><div class="status-top">货币与信用 <span class="dot"></span></div><strong id="statusCredit" class="up">偏宽松</strong><small id="statusCreditNote">尚未确认 AI 分析</small><button type="button" class="theme-toggle" data-theme="货币与信用">查看分析</button></div>
+          <div class="status"><div class="status-top">财政与房地产 <span class="dot red"></span></div><strong id="statusFiscal" class="down">偏弱</strong><small id="statusFiscalNote">尚未确认 AI 分析</small><button type="button" class="theme-toggle" data-theme="财政与房地产">查看分析</button></div>
+          <div class="status"><div class="status-top">外部平衡 <span class="dot"></span></div><strong id="statusExternal" class="up">有支撑</strong><small id="statusExternalNote">尚未确认 AI 分析</small><button type="button" class="theme-toggle" data-theme="外部平衡">查看分析</button></div>
+        </div>
+        <div class="panel theme-details-panel" id="themeDetailsPanel" hidden><div class="panel-head"><h4 id="themeDetailsTitle">主题分析</h4><button type="button" class="period" id="themeDetailsClose">收起</button></div><div id="themeDetailsBody"></div></div>
+        <div class="grid-main">
+          <div>
+            <div class="section-title"><h3>核心指标走势</h3><span>2025年1月 — 2026年8月</span></div>
+            <div class="panel">
+              <div class="panel-head"><h4>宏观核心指标：增长、需求与价格</h4><span>四类指标并列观察，不预设单一主线</span></div>
+              <div class="chart-wrap">
+                <div class="chart-labels"><span>7.25</span><span>7.10</span><span>6.95</span><span>6.80</span></div>
+                <svg class="chart" viewBox="0 0 900 190" preserveAspectRatio="none" aria-label="人民币汇率与净结汇示意图">
+                  <defs><pattern id="grid" width="90" height="38" patternUnits="userSpaceOnUse"><path d="M 90 0 L 0 0 0 38" fill="none" stroke="#e6ebed" stroke-width="1"/></pattern></defs>
+                  <rect x="0" y="0" width="900" height="152" fill="url(#grid)" />
+                  <path d="M0,116 L47,112 L94,108 L141,105 L188,99 L235,94 L282,90 L329,86 L376,83 L423,77 L470,72 L517,69 L564,64 L611,60 L658,57 L705,54 L752,49 L799,45 L846,41 L900,37" fill="none" stroke="#147d79" stroke-width="3"/>
+                  <path d="M0,55 L47,61 L94,54 L141,66 L188,72 L235,64 L282,78 L329,83 L376,89 L423,80 L470,99 L517,92 L564,108 L611,101 L658,113 L705,109 L752,124 L799,119 L846,129 L900,122" fill="none" stroke="#c56e35" stroke-width="3"/>
+                  <path d="M0,139 L47,134 L94,137 L141,131 L188,128 L235,133 L282,125 L329,121 L376,126 L423,119 L470,115 L517,121 L564,112 L611,116 L658,106 L705,111 L752,103 L799,108 L846,98 L900,101" fill="none" stroke="#547da3" stroke-width="2.5" stroke-dasharray="5 4"/>
+                  <path d="M0,84 L47,80 L94,86 L141,82 L188,76 L235,88 L282,79 L329,72 L376,75 L423,68 L470,63 L517,67 L564,57 L611,65 L658,52 L705,58 L752,47 L799,53 L846,44 L900,50" fill="none" stroke="#bd4f4b" stroke-width="2.5" stroke-dasharray="2 4"/>
+                  <line x1="0" y1="152" x2="900" y2="152" stroke="#b8c4c8" />
+                  <g fill="#87939b" font-size="11"><text x="0" y="177">25-01</text><text x="218" y="177">25-06</text><text x="450" y="177">25-12</text><text x="674" y="177">26-05</text><text x="860" y="177">26-08</text></g>
+                </svg>
+                <div class="legend"><span><i></i>工业增加值 / 生产</span><span><i class="orange"></i>社会消费品零售 / 需求</span><span><i style="background:#547da3"></i>核心CPI / 价格</span><span><i style="background:#bd4f4b"></i>社融 / 信用</span></div>
+              </div>
+            </div>
+            <div class="section-title"><h3>核心月度数据矩阵</h3><span>核心指标；完整数据请进入工作台</span></div>
+            <div class="panel matrix"><table><thead><tr><th>指标</th><th>最新值</th><th>上期</th><th>变化</th><th>状态</th><th>统计期</th></tr></thead><tbody id="matrixBody">
+              <tr><td class="metric-name">工业增加值 <span class="sub">同比</span></td><td>—</td><td>—</td><td class="flat">待接入</td><td><span class="badge flat">生产</span></td><td>2026-08</td></tr>
+              <tr><td class="metric-name">社会消费品零售 <span class="sub">同比</span></td><td>—</td><td>—</td><td class="flat">待接入</td><td><span class="badge flat">需求</span></td><td>2026-08</td></tr>
+              <tr><td class="metric-name">核心CPI <span class="sub">同比</span></td><td>—</td><td>—</td><td class="flat">待接入</td><td><span class="badge flat">价格</span></td><td>2026-08</td></tr>
+              <tr><td class="metric-name">社会融资规模 <span class="sub">存量同比</span></td><td>—</td><td>—</td><td class="flat">待接入</td><td><span class="badge flat">信用</span></td><td>2026-08</td></tr>
+              <tr><td class="metric-name">出口额 <span class="sub">亿元</span></td><td>27,274.1</td><td>27,123.8</td><td class="up">+0.6%</td><td><span class="badge up">外部</span></td><td>2026-08</td></tr>
+            </tbody></table></div>
+            <div class="panel history-panel" id="historyPanel"><div class="panel-head"><h4 id="historyTitle">指标历史序列</h4><button class="period" id="historyClose">关闭</button></div><div class="chart-wrap"><svg class="history-chart" id="historyChart" viewBox="0 0 900 230" preserveAspectRatio="none" aria-label="指标历史趋势图"></svg><div class="legend" id="historyLegend"></div></div><div class="history-table"><table><thead><tr><th>统计期</th><th>数值</th><th>单位</th></tr></thead><tbody id="historyBody"></tbody></table></div></div>
+          </div>
+          <div>
+            <div class="section-title"><h3>本月判断</h3><span>事实与解释分开</span></div>
+            <div class="panel"><div class="narrative">
+              <div class="narrative-lead" id="narrativeLead">尚未确认外部 AI 分析结果。本页先展示已导入的事实数据。</div>
+              <div id="aiAnalysisView" class="ai-analysis-view" hidden></div>
+              <div id="defaultNarrative">
+                <h5>主要矛盾</h5><p>导入并确认 AI 分析后，这里显示本月最重要的宏观矛盾。</p>
+                <h5>关键不确定性</h5><p>缺失数据和质量警告会保留在主题分析中，不会被自动补成结论。</p>
+              </div>
+            </div></div>
+        <div class="section-title"><h3>官方数据公布情况</h3><span>按官方发布节奏整理</span></div>
+            <div class="panel"><div class="source-list" id="sourceList">
+              <div class="source-row"><div class="source-name"><span class="dot"></span><div><b>国家统计局</b><small>工业、消费、投资、价格、房地产、PMI等月度数据</small></div></div><span class="source-release-time">次月上旬至中旬</span></div>
+              <div class="source-row"><div class="source-name"><span class="dot"></span><div><b>中国人民银行</b><small>M0/M1/M2、社融、贷款、存款等金融统计</small></div></div><span class="source-release-time">次月中旬</span></div>
+              <div class="source-row"><div class="source-name"><span class="dot"></span><div><b>海关总署</b><small>进出口金额、贸易方式和主要商品</small></div></div><span class="source-release-time">次月上旬</span></div>
+              <div class="source-row"><div class="source-name"><span class="dot"></span><div><b>国家外汇管理局</b><small>外汇储备、银行结售汇、涉外收付款</small></div></div><span class="source-release-time">月度 / 季度</span></div>
+              <div class="source-row"><div class="source-name"><span class="dot"></span><div><b>财政部</b><small>一般公共预算、政府性基金、地方债</small></div></div><span class="source-release-time">次月发布</span></div>
+              <div class="source-row"><div class="source-name"><span class="dot orange"></span><div><b>中国货币网 / 中国债券信息网</b><small>回购利率、债券收益率、汇率中间价</small></div></div><span class="source-release-time">交易日发布</span></div>
+            </div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <dialog id="uploadDialog"><form method="dialog" id="uploadForm" enctype="multipart/form-data"><h3>导入月度数据</h3><p class="muted">上传官方 CSV、JSON 或简单表格 Excel；原始文件会保存在本机数据目录。</p><label>统计期 <input name="period" class="period" required placeholder="2026-08"></label><label>指标 <select name="indicator" class="period" id="indicatorSelect" required></select></label><label>文件 <input name="file" type="file" accept=".csv,.json,.xlsx,.xlsm" required></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button value="cancel" class="period">取消</button><button value="default" class="action" id="submitUpload">导入</button></div><p id="uploadMessage" class="muted"></p></form></dialog>
+  <dialog id="uploadsDialog"><form method="dialog" id="uploadsForm"><div class="uploads-head"><div><h3>已上传文件</h3><p class="muted">查看当前月份的导入记录。重复记录会标注次数；移除只清理项目副本，不删除电脑上的原始文件。</p></div><div class="uploads-actions"><button type="button" class="remove-duplicates" id="deduplicateBtn">一键移除重复项</button><button value="cancel" class="period">关闭</button></div></div><div class="uploads-table-wrap"><table class="uploads-table"><thead><tr><th>指标</th><th>统计期</th><th>文件</th><th>导入时间</th><th>版本</th><th>值</th><th>操作</th></tr></thead><tbody id="uploadsBody"><tr><td colspan="7">正在读取上传记录...</td></tr></tbody></table></div><p id="uploadsMessage" class="muted"></p></form></dialog>
+  <dialog id="batchDialog"><form method="dialog" id="batchForm" enctype="multipart/form-data"><h3>导入月度数据包</h3><p class="muted">选择一个月份文件夹中的 Excel 文件，程序会按文件编号识别 01 至 42 指标，其中季度指标按最近已完成季度归档。</p><label>统计期 <input name="period" class="period" required placeholder="2026-08"></label><label>文件夹中的 Excel 文件 <input name="files" type="file" webkitdirectory directory multiple accept=".xlsx,.xlsm" required></label><pre id="batchPreview" style="white-space:pre-wrap;color:var(--muted);font:12px/1.5 inherit"></pre><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button value="cancel" class="period">取消</button><button value="preview" class="period" id="previewBatch">预览</button><button value="commit" class="action" id="commitBatch" style="display:none" disabled>确认导入</button></div><p id="batchMessage" class="muted"></p></form></dialog>
+  <dialog id="analysisDialog"><form method="dialog" id="analysisForm" enctype="multipart/form-data"><div class="uploads-head"><div><h3>导入 AI 分析结果</h3><p class="muted">导入外部 AI 根据 Agent 包生成的 analysis-result.json，系统会校验统计期和指标引用。</p></div><button type="button" class="period" id="closeAnalysis">关闭</button></div><label>统计期 <input name="period" class="period" required></label><label>analysis-result.json <input name="file" type="file" accept=".json,application/json" required></label><pre id="analysisPreview" style="white-space:pre-wrap;color:var(--muted);font:12px/1.5 inherit"></pre><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button type="button" class="action" id="importAnalysis">导入并预览</button><button type="button" class="action" id="confirmAnalysis" style="display:none">确认分析结果</button></div><p id="analysisMessage" class="muted"></p></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <style>
+    dialog { border:1px solid var(--line); border-radius:8px; padding:22px; width:min(430px,calc(100vw - 32px)); color:var(--ink); box-shadow:var(--shadow); }
+    dialog::backdrop { background:rgba(18,50,71,.28); }
+    dialog label { display:block; margin:13px 0 0; color:var(--muted); font-size:12px; }
+    dialog input, dialog select { display:block; width:100%; margin-top:5px; }
+    #toast { position:fixed; right:22px; bottom:22px; background:var(--navy); color:white; padding:10px 14px; border-radius:5px; opacity:0; transform:translateY(8px); transition:.2s; pointer-events:none; }
+    #toast.show { opacity:1; transform:translateY(0); }
+    .history-panel { margin-top: 16px; display: none; }
+    .history-panel.open { display: block; }
+    .history-chart { width: 100%; height: 230px; display: block; }
+    .history-table { overflow-x: auto; max-height: 220px; }
+    .history-table table { min-width: 520px; }
+    .metric-link { color: var(--navy); text-decoration: underline; text-decoration-color: #9eb7c3; text-underline-offset: 3px; cursor: pointer; }
+    #uploadsDialog { width: min(980px, calc(100vw - 32px)); }
+    .uploads-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
+    .uploads-head h3 { margin:0 0 5px; }
+    .uploads-head .muted { margin:0; }
+    .uploads-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .uploads-table-wrap { overflow-x:auto; margin-top:15px; border:1px solid var(--line); }
+    .uploads-table { width:100%; min-width:760px; border-collapse:collapse; font-size:12px; }
+    .uploads-table th, .uploads-table td { padding:10px 9px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
+    .uploads-table th { color:var(--muted); font-weight:600; background:#f7f9f9; }
+    .uploads-table tr:last-child td { border-bottom:0; }
+    .upload-duplicate { color:#a15c2b; font-weight:600; }
+    .remove-upload { border:1px solid #d8a6a4; color:#a74440; background:#fff; border-radius:4px; padding:4px 8px; cursor:pointer; }
+    .remove-upload:hover { background:#fff4f3; }
+    .remove-duplicates { border:1px solid #d8a6a4; color:#a74440; background:#fff; border-radius:4px; padding:7px 10px; cursor:pointer; white-space:nowrap; }
+    .remove-duplicates:hover { background:#fff4f3; }
+    .ai-analysis-view { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+    .ai-regime { display:flex; align-items:baseline; flex-wrap:wrap; gap:9px; margin-bottom:14px; }
+    .ai-regime-label { color:var(--muted); font-size:12px; }
+    .ai-regime strong { color:var(--navy); font-size:18px; }
+    .ai-confidence { color:var(--muted); font-size:12px; }
+    .ai-theme-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:10px 0 16px; }
+    .ai-theme { border:1px solid var(--line); background:#fafcfc; padding:11px 12px; border-radius:5px; }
+    .ai-theme-head { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+    .ai-theme-head strong { color:var(--navy); font-size:13px; }
+    .ai-theme-status { color:#147d79; font-size:12px; font-weight:600; text-align:right; }
+    .ai-theme small { display:block; color:var(--muted); margin-top:4px; }
+    .ai-theme ul, .ai-list { margin:7px 0 0 17px; padding:0; color:var(--muted); font-size:12px; line-height:1.55; }
+    .ai-analysis-view h5 { margin:13px 0 5px; }
+    .ai-list.warn { color:#a15c2b; }
+    .status { position:relative; }
+    .theme-toggle { margin-top:10px; border:1px solid #b7c9cb; background:#fff; color:var(--navy); border-radius:4px; padding:5px 8px; font-size:11px; cursor:pointer; }
+    .theme-toggle:hover { background:#eef6f5; border-color:#7da9a8; }
+    .theme-toggle[aria-expanded="true"] { background:#e7f1f0; border-color:#147d79; }
+    .regime-summary { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin:-5px 0 12px; }
+    .regime-summary strong { color:var(--navy); font-size:18px; }
+    .regime-summary span { color:var(--muted); font-size:12px; }
+    .theme-details-panel { margin:16px 0 20px; }
+    .theme-details-panel[hidden] { display:none; }
+    .theme-detail-lead { padding:12px 0 4px; color:var(--ink); line-height:1.65; }
+    .theme-detail-section { border-top:1px solid var(--line); padding:12px 0 0; margin-top:12px; }
+    .theme-detail-section h5 { margin:0 0 6px; color:var(--navy); }
+    .theme-detail-section p { margin:0; line-height:1.65; }
+    .logic-chain { margin:0; padding-left:20px; color:var(--muted); line-height:1.7; }
+    .cross-links { display:grid; gap:8px; }
+    .cross-link { border-left:3px solid #9eb7c3; padding:7px 10px; background:#fafcfc; color:var(--muted); font-size:12px; line-height:1.55; }
+    .cross-link strong { color:var(--navy); }
+    @media (max-width: 760px) { .ai-theme-grid { grid-template-columns:1fr; } }
+  </style>
+  <script>
+    (() => {
+      const periodSelect = document.querySelector('.period');
+      const matrix = document.getElementById('matrixBody');
+      const dialog = document.getElementById('uploadDialog');
+      const batchDialog = document.getElementById('batchDialog');
+      const uploadsDialog = document.getElementById('uploadsDialog');
+      const analysisDialog = document.getElementById('analysisDialog');
+      const toast = document.getElementById('toast');
+      const historyPanel = document.getElementById('historyPanel');
+      const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const show = (message) => { toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2800); };
+      const fmt = (value, unit) => value === null || value === undefined ? '—' : `${Number(value).toLocaleString('zh-CN', {maximumFractionDigits: 2})} ${unit || ''}`;
+      const showHistory = async (indicatorId, name) => {
+        const response = await fetch(`/api/history?indicator=${encodeURIComponent(indicatorId)}`);
+        const data = await response.json();
+        const history = data.history || [];
+        document.getElementById('historyTitle').textContent = `${name} · 历史序列`;
+        document.getElementById('historyBody').innerHTML = history.length ? history.slice().reverse().map((row) => `<tr><td>${esc(row.period)}</td><td>${esc(fmt(row.value, ''))}</td><td>${esc(row.unit || '')}</td></tr>`).join('') : '<tr><td colspan="3">暂无已导入的历史数据</td></tr>';
+        const chart = document.getElementById('historyChart');
+        const numeric = history.filter((row) => typeof row.value === 'number');
+        if (!numeric.length) { chart.innerHTML = '<text x="450" y="115" text-anchor="middle" fill="#667380">暂无可绘制的数值</text>'; } else {
+          const values = numeric.map((row) => row.value); const min = Math.min(...values); const max = Math.max(...values); const spread = max - min || 1;
+          const points = numeric.map((row, index) => `${(index / Math.max(numeric.length - 1, 1)) * 860 + 20},${190 - ((row.value - min) / spread) * 150}`).join(' ');
+          chart.innerHTML = `<line x1="20" y1="190" x2="880" y2="190" stroke="#b8c4c8"/><polyline points="${points}" fill="none" stroke="#147d79" stroke-width="3"/><text x="20" y="215" fill="#87939b" font-size="11">${esc(numeric[0].period)}</text><text x="880" y="215" text-anchor="end" fill="#87939b" font-size="11">${esc(numeric[numeric.length - 1].period)}</text><text x="20" y="18" fill="#87939b" font-size="11">${esc(String(max))}</text><text x="20" y="184" fill="#87939b" font-size="11">${esc(String(min))}</text>`;
+        }
+        document.getElementById('historyLegend').innerHTML = `<span><i></i>${esc(name)} · ${history.length} 个统计期</span>`;
+        historyPanel.classList.add('open'); historyPanel.scrollIntoView({behavior:'smooth', block:'start'});
+      };
+      const refresh = async () => {
+        const period = periodSelect.value;
+        const response = await fetch(`/api/dashboard?period=${encodeURIComponent(period)}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        const packageStatus = data.package_status || {};
+        document.querySelector('.report-meta').innerHTML = `<b>月度数据 ${packageStatus.monthly_available ?? 0}/${packageStatus.monthly_total ?? 0}</b><br>季度数据 ${packageStatus.quarterly_available ?? 0}/${packageStatus.quarterly_total ?? 0} · 全部配置 ${packageStatus.all_available ?? data.available}/${packageStatus.all_total ?? data.total}<br>最后更新：${esc(data.updated_at)}<br><span id="analysisState">AI 分析：${data.analysis_status === 'confirmed' ? '已确认' : '未导入'}</span>`;
+        matrix.innerHTML = data.rows.filter((row) => row.homepage_core).map((row) => {
+          const direction = row.change === null ? 'flat' : row.change > 0 ? 'up' : row.change < 0 ? 'down' : 'flat';
+          return `<tr data-indicator="${esc(row.indicator_id)}" data-name="${esc(row.name)}"><td class="metric-name"><button class="metric-link" type="button">${esc(row.name)}</button> <span class="sub">${esc(row.unit)}</span></td><td>${esc(fmt(row.value, ''))}</td><td>${esc(fmt(row.previous, ''))}</td><td class="${direction}">${row.change === null ? '待上传' : esc((row.change > 0 ? '+' : '') + Number(row.change).toFixed(2))}</td><td><span class="badge ${row.value === null ? 'flat' : direction}">${esc(row.status)}</span></td><td>${esc(period)}</td></tr>`;
+        }).join('') || '<tr><td colspan="6">当前月份尚无标准化数据，请从“导入文件”开始。</td></tr>';
+        matrix.querySelectorAll('tr[data-indicator]').forEach((row) => row.querySelector('.metric-link').addEventListener('click', () => showHistory(row.dataset.indicator, row.dataset.name)));
+        loadAnalysis();
+      };
+      const loadPeriods = async () => {
+        try { const data = await (await fetch('/api/periods')).json(); if (data.periods?.length) { periodSelect.innerHTML = data.periods.map((p) => `<option value="${p}">${p.slice(0,4)}年${Number(p.slice(5))}月</option>`).join(''); } } catch (_) {}
+        refresh();
+      };
+      const loadIndicators = async () => {
+        const data = await (await fetch(`/api/dashboard?period=${encodeURIComponent(periodSelect.value)}`)).json();
+        document.getElementById('indicatorSelect').innerHTML = (data.rows || []).map((row) => `<option value="${esc(row.indicator_id)}">${esc(row.name)}</option>`).join('');
+      };
+      const loadUploads = async () => {
+        const body = document.getElementById('uploadsBody');
+        const message = document.getElementById('uploadsMessage');
+        body.innerHTML = '<tr><td colspan="7">正在读取上传记录...</td></tr>';
+        message.textContent = '';
+        try {
+          const response = await fetch(`/api/uploads?period=${encodeURIComponent(periodSelect.value)}`);
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || '读取失败');
+          const uploads = data.uploads || [];
+          const deduplicateButton = document.getElementById('deduplicateBtn');
+          const hasDuplicates = uploads.some((row) => Number(row.duplicate_count || 1) > 1);
+          deduplicateButton.disabled = !hasDuplicates;
+          deduplicateButton.title = hasDuplicates ? '保留每个指标和统计期的最新版本' : '当前月份没有重复上传';
+          body.innerHTML = uploads.length ? uploads.map((row) => {
+            const duplicate = Number(row.duplicate_count || 1) > 1;
+            const version = duplicate ? `<span class="upload-duplicate">重复 ${esc(row.duplicate_count)} 次</span>` : '唯一版本';
+            return `<tr><td>${esc(row.indicator_name)}</td><td>${esc(row.period)}</td><td title="${esc(row.file_name)}">${esc(row.file_name)}</td><td>${esc(row.imported_at || '—')}</td><td>${version}</td><td>${esc(fmt(row.value, row.unit || ''))}</td><td><button type="button" class="remove-upload" data-artifact-id="${esc(row.artifact_id)}">移除</button></td></tr>`;
+          }).join('') : '<tr><td colspan="7">当前月份没有已上传文件</td></tr>';
+          body.querySelectorAll('.remove-upload').forEach((button) => button.addEventListener('click', async () => {
+            const artifactId = button.dataset.artifactId;
+            if (!window.confirm('确认移除这条上传记录及其对应数据吗？')) return;
+            button.disabled = true;
+            const response = await fetch('/api/uploads/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({artifact_id: Number(artifactId)})});
+            const result = await response.json();
+            if (!response.ok || result.status !== 'success') { message.textContent = result.error || '移除失败'; button.disabled = false; return; }
+            show('上传记录已移除');
+            await loadUploads();
+            await refresh();
+          }));
+        } catch (error) {
+          document.getElementById('deduplicateBtn').disabled = true;
+          body.innerHTML = `<tr><td colspan="7">${esc(error.message || '读取失败')}</td></tr>`;
+        }
+      };
+      const statusClass = (status) => {
+        const value = String(status || '');
+        if (/偏弱|收缩|承压|无法|下降|收缩区间/.test(value)) return 'down';
+        if (/支持|增长|顺差|韧性|发力|有支撑/.test(value)) return 'up';
+        return 'flat';
+      };
+      const listItemText = (item) => {
+        if (item && typeof item === 'object') {
+          if (item.indicator_id) return `${item.indicator_id}${item.period ? ` ${item.period}` : ''}${item.value !== undefined ? ` ${item.value}` : ''}${item.unit ? ` ${item.unit}` : ''}${item.source ? ` ${item.source}` : ''}`;
+          if (item.theme || item.relationship) return `${item.theme || '关联主题'}：${item.relationship || ''}`;
+          return JSON.stringify(item);
+        }
+        return String(item);
+      };
+      const listHtml = (items, empty = '暂无') => {
+        const values = Array.isArray(items) ? items.filter((item) => String(item).trim()) : [];
+        return values.length ? `<ul class="ai-list">${values.map((item) => `<li>${esc(listItemText(item))}</li>`).join('')}</ul>` : `<p class="muted">${empty}</p>`;
+      };
+      const setStatusCard = (valueId, noteId, theme) => {
+        const value = theme?.status || '未判断';
+        const confidence = theme?.confidence ? `置信度：${theme.confidence}` : '未提供置信度';
+        const valueNode = document.getElementById(valueId);
+        const noteNode = document.getElementById(noteId);
+        valueNode.textContent = value;
+        valueNode.className = statusClass(value);
+        noteNode.textContent = confidence;
+      };
+      let analysisThemes = {};
+      const values = (value) => Array.isArray(value) ? value.filter((item) => item !== null && item !== undefined && String(item).trim()) : [];
+      const renderSectionList = (items, empty = '暂无') => listHtml(values(items), empty);
+      const renderThemeDetails = (name) => {
+        const panel = document.getElementById('themeDetailsPanel');
+        const body = document.getElementById('themeDetailsBody');
+        const theme = analysisThemes[name];
+        document.querySelectorAll('.theme-toggle').forEach((button) => {
+          const expanded = button.dataset.theme === name && Boolean(theme);
+          button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+          button.textContent = expanded ? '收起分析' : '查看分析';
+        });
+        document.getElementById('themeDetailsTitle').textContent = `${name} · 详细分析`;
+        if (!theme) {
+          body.innerHTML = '<p class="muted">该主题尚未导入 AI 分析结果。请先导出 Agent 包，完成外部分析后再导入。</p>';
+        } else {
+          const links = values(theme.cross_theme_links);
+          const linkHtml = links.length ? `<div class="cross-links">${links.map((link) => { const item = link && typeof link === 'object' ? link : {theme:'跨领域关联', relationship:String(link)}; return `<div class="cross-link"><strong>${esc(item.theme || '关联主题')}</strong>：${esc(item.relationship || '未提供关系说明')}${values(item.data_refs).length ? `<br><span>数据依据：${esc(values(item.data_refs).join('、'))}</span>` : ''}</div>`; }).join('')}</div>` : '<p class="muted">未提供跨主题关联。</p>';
+          const chain = values(theme.logic_chain);
+          body.innerHTML = `<div class="theme-detail-lead"><strong>${esc(theme.status || '当前无法判断')}</strong>　<span class="muted">置信度：${esc(theme.confidence || '未提供')}</span></div>
+            <div class="theme-detail-section"><h5>数据事实</h5>${renderSectionList(theme.data_facts, '未提供数据事实')}</div>
+            <div class="theme-detail-section"><h5>数据表明什么</h5><p>${esc(theme.what_data_indicates || theme.conclusion || '该主题暂未提供直接解释。')}</p></div>
+            <div class="theme-detail-section"><h5>跨领域关联</h5>${linkHtml}</div>
+            <div class="theme-detail-section"><h5>逻辑链</h5>${chain.length ? `<ol class="logic-chain">${chain.map((item) => `<li>${esc(item)}</li>`).join('')}</ol>` : '<p class="muted">未提供推理链。</p>'}</div>
+            <div class="theme-detail-section"><h5>未来的变化和影响</h5>${renderSectionList(theme.future_implications, '未提供条件式影响判断')}</div>
+            <div class="theme-detail-section"><h5>支持证据</h5>${renderSectionList(theme.supporting_evidence)}</div>
+            <div class="theme-detail-section"><h5>反向证据</h5>${renderSectionList(theme.counter_evidence)}</div>
+            <div class="theme-detail-section"><h5>当前无法判断</h5>${renderSectionList(theme.unknowns)}</div>
+            <div class="theme-detail-section"><h5>后续观察</h5>${renderSectionList(theme.watchlist)}</div>
+            ${values(theme.data_refs).length ? `<div class="theme-detail-section"><h5>引用指标</h5>${renderSectionList(theme.data_refs)}</div>` : ''}`;
+        }
+        panel.hidden = false;
+        panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+      };
+      const resetAnalysisView = () => {
+        document.getElementById('narrativeLead').textContent = '尚未确认外部 AI 分析结果。本页先展示已导入的事实数据。';
+        document.getElementById('regimeLabel').textContent = '尚未确认宏观状态';
+        document.getElementById('regimeConfidence').textContent = '等待 AI 分析结果';
+        document.getElementById('defaultNarrative').innerHTML = '<h5>主要矛盾</h5><p>导入并确认 AI 分析后，这里显示本月最重要的宏观矛盾。</p><h5>关键不确定性</h5><p>缺失数据和质量警告会保留在主题分析中，不会被自动补成结论。</p>';
+        document.getElementById('defaultNarrative').hidden = false;
+        document.getElementById('aiAnalysisView').hidden = true;
+        document.getElementById('themeDetailsPanel').hidden = true;
+        analysisThemes = {};
+        document.querySelectorAll('.theme-toggle').forEach((button) => { button.setAttribute('aria-expanded', 'false'); button.textContent = '查看分析'; });
+        [['statusGrowth','statusGrowthNote'],['statusPrice','statusPriceNote'],['statusCredit','statusCreditNote'],['statusFiscal','statusFiscalNote'],['statusExternal','statusExternalNote'],['statusStructure','statusStructureNote']].forEach(([valueId, noteId]) => {
+          document.getElementById(valueId).textContent = '未判断';
+          document.getElementById(valueId).className = 'flat';
+          document.getElementById(noteId).textContent = '尚未确认 AI 分析';
+        });
+      };
+      const renderAnalysis = (confirmed) => {
+        const result = confirmed?.result || {};
+        const regime = result.macro_regime || {};
+        const themes = result.themes && typeof result.themes === 'object' ? result.themes : {};
+        const summary = regime.summary || result.overview || '当前无法判断';
+        analysisThemes = themes;
+        document.getElementById('regimeLabel').textContent = regime.label || '当前无法判断';
+        document.getElementById('regimeConfidence').textContent = `置信度：${regime.confidence || '未提供'}`;
+        document.getElementById('narrativeLead').textContent = summary;
+        document.getElementById('defaultNarrative').innerHTML = `<h5>主要矛盾</h5>${listHtml(result.contradictions, '分析结果未提供主要矛盾')}<h5>关键不确定性</h5>${listHtml(result.unknowns, '分析结果未提供不确定性')}`;
+        document.getElementById('defaultNarrative').hidden = false;
+        document.getElementById('aiAnalysisView').hidden = true;
+        document.getElementById('themeDetailsPanel').hidden = true;
+        document.querySelectorAll('.theme-toggle').forEach((button) => { button.setAttribute('aria-expanded', 'false'); button.textContent = '查看分析'; });
+        setStatusCard('statusGrowth', 'statusGrowthNote', themes['生产与供给'] || themes['需求与收入']);
+        setStatusCard('statusPrice', 'statusPriceNote', themes['价格与利润']);
+        setStatusCard('statusCredit', 'statusCreditNote', themes['货币与信用']);
+        setStatusCard('statusFiscal', 'statusFiscalNote', themes['财政与房地产']);
+        setStatusCard('statusExternal', 'statusExternalNote', themes['外部平衡']);
+        setStatusCard('statusStructure', 'statusStructureNote', themes['需求与收入']);
+      };
+      const loadAnalysis = async () => {
+        const response = await fetch(`/api/analysis?period=${encodeURIComponent(periodSelect.value)}`);
+        if (!response.ok) return null;
+        const data = await response.json();
+        const confirmed = data.confirmed;
+        const latest = (data.analyses || [])[0];
+        const state = document.getElementById('analysisState');
+        if (confirmed) {
+          state.textContent = `AI 分析：已确认 v${confirmed.version}`;
+          renderAnalysis(confirmed);
+        } else {
+          state.textContent = latest ? `AI 分析：待确认 v${latest.version}` : 'AI 分析：未导入';
+          resetAnalysisView();
+        }
+        return data;
+      };
+      document.querySelectorAll('.theme-toggle').forEach((button) => button.addEventListener('click', () => {
+        const name = button.dataset.theme;
+        const panel = document.getElementById('themeDetailsPanel');
+        if (!panel.hidden && button.getAttribute('aria-expanded') === 'true') {
+          panel.hidden = true;
+          button.setAttribute('aria-expanded', 'false');
+          button.textContent = '查看分析';
+          return;
+        }
+        renderThemeDetails(name);
+      }));
+      document.getElementById('themeDetailsClose').addEventListener('click', () => {
+        document.getElementById('themeDetailsPanel').hidden = true;
+        document.querySelectorAll('.theme-toggle').forEach((button) => { button.setAttribute('aria-expanded', 'false'); button.textContent = '查看分析'; });
+      });
+      periodSelect.addEventListener('change', refresh);
+      document.getElementById('refreshBtn').addEventListener('click', async () => { show('已启动整理，请稍后刷新'); await fetch('/api/refresh', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({period:periodSelect.value})}); });
+      document.getElementById('reportBtn').addEventListener('click', async () => { const data = await (await fetch('/api/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({period:periodSelect.value})})).json(); if (data.html) { show('月报已生成'); window.open(data.html, '_blank'); } else show(data.error || '月报生成失败'); });
+      document.getElementById('agentBtn').addEventListener('click', async () => { const data = await (await fetch('/api/agent-context', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({period:periodSelect.value})})).json(); if (data.download || data.zip) { show(`Agent 分析包已生成：${data.output_dir || ''}`); window.open(data.download || data.zip, '_blank'); } else show(data.error || 'Agent 分析包生成失败'); });
+      document.getElementById('analysisBtn').addEventListener('click', () => { document.querySelector('#analysisForm input[name=period]').value = periodSelect.value; document.getElementById('analysisPreview').textContent = ''; document.getElementById('analysisMessage').textContent = ''; document.getElementById('confirmAnalysis').style.display = 'none'; analysisDialog.showModal(); });
+      document.getElementById('closeAnalysis').addEventListener('click', () => analysisDialog.close());
+      const importAnalysis = async () => {
+        const form = document.getElementById('analysisForm');
+        const message = document.getElementById('analysisMessage');
+        const file = form.querySelector('input[name=file]').files?.[0];
+        if (!form.querySelector('input[name=period]').value) { message.textContent = '请填写统计期'; return; }
+        if (!file) { message.textContent = '请先选择 analysis-result.json'; return; }
+        const button = document.getElementById('importAnalysis');
+        button.disabled = true;
+        message.textContent = '正在导入并校验…';
+        try {
+          const response = await fetch('/api/analysis/import', {method:'POST', body:new FormData(form)});
+          const data = await response.json();
+          if (!response.ok) { message.textContent = data.error || '分析结果导入失败'; return; }
+          form.dataset.analysisId = data.analysis.analysis_id;
+          const previewResult = data.analysis.result || {};
+          const previewRegime = previewResult.macro_regime || {};
+          document.getElementById('analysisPreview').textContent = `版本：v${data.analysis.version}\n状态：待确认\n警告：${data.analysis.warnings?.length ? data.analysis.warnings.join('；') : '无'}\n\n宏观状态：${previewRegime.label || '未提供'}\n置信度：${previewRegime.confidence || '未提供'}\n总览：${previewRegime.summary || previewResult.overview || '未提供'}`;
+          document.getElementById('confirmAnalysis').style.display = 'inline-block';
+          message.textContent = '请预览后确认分析结果';
+        } catch (error) {
+          message.textContent = error.message || '无法连接本地服务，请确认网页服务仍在运行';
+        } finally {
+          button.disabled = false;
+        }
+      };
+      document.getElementById('importAnalysis').addEventListener('click', importAnalysis);
+      document.getElementById('confirmAnalysis').addEventListener('click', async () => {
+        const id = Number(document.getElementById('analysisForm').dataset.analysisId);
+        const response = await fetch('/api/analysis/confirm', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({analysis_id:id})});
+        const data = await response.json();
+        if (!response.ok) { document.getElementById('analysisMessage').textContent = data.error || '确认失败'; return; }
+        show('AI 分析结果已确认'); analysisDialog.close(); await refresh();
+      });
+      document.getElementById('uploadBtn').addEventListener('click', async () => { document.querySelector('#uploadForm input[name=period]').value = periodSelect.value; await loadIndicators(); dialog.showModal(); });
+      document.getElementById('uploadsBtn').addEventListener('click', async () => { await loadUploads(); uploadsDialog.showModal(); });
+      document.getElementById('deduplicateBtn').addEventListener('click', async () => {
+        const period = periodSelect.value;
+        if (!window.confirm(`确认清理 ${period} 的重复上传吗？每个指标和统计期只保留最新版本。`)) return;
+        const button = document.getElementById('deduplicateBtn');
+        button.disabled = true;
+        const response = await fetch('/api/uploads/deduplicate', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({period})});
+        const result = await response.json();
+        if (!response.ok || result.status !== 'success') { document.getElementById('uploadsMessage').textContent = result.error || '重复项清理失败'; button.disabled = false; return; }
+        show(`已移除 ${result.removed || 0} 条重复记录`);
+        await loadUploads();
+        await refresh();
+      });
+      document.getElementById('uploadForm').addEventListener('submit', async (event) => { if (event.submitter?.value !== 'default') return; event.preventDefault(); const form = event.currentTarget; const response = await fetch('/api/upload', {method:'POST', body:new FormData(form)}); const data = await response.json(); document.getElementById('uploadMessage').textContent = data.status === 'success' ? `已导入 ${data.points} 条数据` : (data.errors || [data.error]).join('；'); if (data.status === 'success') { show('数据已导入'); dialog.close(); await loadPeriods(); } });
+      document.getElementById('uploadForm').querySelector('button[value="cancel"]').addEventListener('click', () => dialog.close());
+      document.getElementById('batchBtn').addEventListener('click', () => { document.querySelector('#batchForm input[name=period]').value = periodSelect.value; document.getElementById('batchPreview').textContent = ''; document.getElementById('batchMessage').textContent = ''; const commitButton = document.getElementById('commitBatch'); commitButton.disabled = true; commitButton.style.display = 'none'; batchDialog.showModal(); });
+      document.getElementById('batchForm').addEventListener('submit', async (event) => {
+        const action = event.submitter?.value;
+        if (action === 'cancel') return;
+        event.preventDefault();
+        const form = event.currentTarget;
+        const message = document.getElementById('batchMessage');
+        if (action === 'preview') {
+          const response = await fetch('/api/batch-preview', {method:'POST', body:new FormData(form)});
+          const data = await response.json();
+          if (!response.ok) { message.textContent = data.error || '预览失败'; return; }
+          form.dataset.batchId = data.batch_id;
+          document.getElementById('batchPreview').textContent = `识别文件：${data.recognized}/${data.expected}\n缺失编号：${data.missing_numbers?.length ? data.missing_numbers.join(', ') : '无'}\n\n` + (data.files || []).map((item) => `${String(item.number).padStart(2,'0')}  ${item.name || item.indicator_id}  ${item.status}${item.value !== undefined ? `  ${item.value} ${item.unit || ''}` : ''}${item.message ? `  ${item.message}` : ''}`).join('\n');
+          const commitButton = document.getElementById('commitBatch');
+          const canCommit = (data.files || []).some((item) => item.status === '待导入');
+          commitButton.disabled = !canCommit;
+          commitButton.style.display = canCommit ? 'inline-block' : 'none';
+          message.textContent = '请核对预览后确认导入';
+        } else if (action === 'commit') {
+          const response = await fetch('/api/batch-commit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({batch_id:form.dataset.batchId})});
+          const data = await response.json();
+          if (!response.ok) { message.textContent = data.error || '导入失败'; return; }
+          message.textContent = `已导入 ${data.success} 项指标`;
+          show(`月度数据包已导入 ${data.success} 项`);
+          batchDialog.close();
+          await loadPeriods();
+        }
+      });
+      document.getElementById('batchForm').querySelector('button[value="cancel"]').addEventListener('click', () => batchDialog.close());
+      document.getElementById('historyClose').addEventListener('click', () => historyPanel.classList.remove('open'));
+      loadPeriods();
+    })();
+  </script>
+</body>
+</html>
