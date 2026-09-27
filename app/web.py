@@ -411,6 +411,18 @@ class WebHandler(BaseHTTPRequestHandler):
                         history.append({"period": point.period, "value": point.value, "unit": point.unit})
             _json(self, {"indicator_id": indicator_id, "history": sorted(history, key=lambda row: row["period"])})
             return
+        if parsed.path == "/api/series":
+            indicators, _, _ = validate_config(CONFIG_DIR)
+            requested = {item.indicator_id for item in indicators}
+            series: dict[str, list[dict[str, object]]] = {item.indicator_id: [] for item in indicators}
+            for period in _periods(self.data_root):
+                for point in _load_points(self.data_root, period):
+                    if point.indicator_id in requested and point.value is not None:
+                        series[point.indicator_id].append({"period": point.period, "value": point.value, "unit": point.unit})
+            for values in series.values():
+                values.sort(key=lambda row: str(row["period"]))
+            _json(self, {"series": series, "indicators": [{"indicator_id": item.indicator_id, "name": item.name, "theme": item.theme, "unit": item.unit, "frequency": item.frequency, "value_type": item.value_type, "definition": item.definition} for item in indicators]})
+            return
         if parsed.path == "/api/uploads":
             period = parse_qs(parsed.query).get("period", [""])[0]
             if period and not re.fullmatch(r"\d{4}-\d{2}", period):
